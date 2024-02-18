@@ -3,6 +3,7 @@ package com.momo.fitnessTracker.service;
 import com.momo.fitnessTracker.Dto.UserCredentialsDto;
 import com.momo.fitnessTracker.Dto.UserDetailsDto;
 import com.momo.fitnessTracker.Dto.UserDto;
+import com.momo.fitnessTracker.Dto.UserProfilePictureDto;
 import com.momo.fitnessTracker.exception.UserNotFoundException;
 import com.momo.fitnessTracker.model.User;
 import com.momo.fitnessTracker.repository.UserRepository;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService{
     public void updateUserDetails(UserDto userDto,UserDetailsDto userDetailsDto){
         User updtUser = mapper.map(userDto,User.class);
         System.out.println("--------------");
-        System.out.println(updtUser);
+        System.out.println("Inside update user details");
         System.out.println(updtUser.getUsername());
         System.out.println("--------------");
         updtUser.setFirstName(userDetailsDto.getFirstName());
@@ -53,12 +54,32 @@ public class UserServiceImpl implements UserService{
     public void updateUserCredentials(UserDto userDto, UserCredentialsDto userCredentialsDto) {
         User updtUser = mapper.map(userDto,User.class);
         System.out.println("--------------");
-        System.out.println(updtUser);
+        System.out.println("Inside update user credentials");
         System.out.println(updtUser.getUsername());
         System.out.println("--------------");
 
         updtUser.setUsername(userCredentialsDto.getUsername());
         updtUser.setPassword(userCredentialsDto.getPassword());
+        userRepository.save(updtUser);
+    }
+
+    @Override
+    public void updateProfilePicture(UserDto userDto, UserProfilePictureDto userProfilePictureDto) {
+        User updtUser = mapper.map(userDto,User.class);
+        System.out.println("--------------");
+        System.out.println("Inside update profile picture");
+        System.out.println(updtUser.getUsername());
+        System.out.println("--------------");
+
+
+        MultipartFile file = userProfilePictureDto.getProfileImageFile();
+        if(file != null && !file.isEmpty()){
+            try{
+                updtUser.setProfileImage(file.getBytes());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         userRepository.save(updtUser);
     }
 

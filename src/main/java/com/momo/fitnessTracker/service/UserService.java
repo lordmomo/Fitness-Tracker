@@ -3,6 +3,7 @@ package com.momo.fitnessTracker.service;
 import com.momo.fitnessTracker.Dto.UserCredentialsDto;
 import com.momo.fitnessTracker.Dto.UserDetailsDto;
 import com.momo.fitnessTracker.Dto.UserDto;
+import com.momo.fitnessTracker.Dto.UserProfilePictureDto;
 import com.momo.fitnessTracker.exception.UserNotFoundException;
 import com.momo.fitnessTracker.model.User;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,6 @@ public interface UserService {
     void updateUserDetails(UserDto userDto, UserDetailsDto userDetailsDto);
 
     void updateUserCredentials(UserDto existingUser, UserCredentialsDto userCredentialsDto);
+
+    void updateProfilePicture(UserDto existingUser, UserProfilePictureDto userProfilePictureDto);
 }

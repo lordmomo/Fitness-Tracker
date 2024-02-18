@@ -53,6 +53,7 @@ public class User {
     }
 
 
+    @Transient
     public String activeUser;
 
     public String getActiveUser(){

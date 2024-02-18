@@ -3,6 +3,7 @@ package com.momo.fitnessTracker.controller;
 import com.momo.fitnessTracker.Dto.UserCredentialsDto;
 import com.momo.fitnessTracker.Dto.UserDetailsDto;
 import com.momo.fitnessTracker.Dto.UserDto;
+import com.momo.fitnessTracker.Dto.UserProfilePictureDto;
 import com.momo.fitnessTracker.exception.UserNotFoundException;
 import com.momo.fitnessTracker.model.User;
 import com.momo.fitnessTracker.service.UserServiceImpl;
@@ -45,7 +46,7 @@ public class UserController {
         return "register-success";
     }
 
-    @GetMapping("/edit-details-profile/{username}")
+    @GetMapping("/edit-profile/{username}")
     public String editDetailsProfile(@PathVariable("username") String username, Model model) throws UserNotFoundException {
         System.out.println("inside edit profile.");
         UserDto userDto = userServiceImpl.findByUsername(username);
@@ -53,12 +54,20 @@ public class UserController {
         return "edit-profile";
     }
 
-    @GetMapping("/edit-credentials-profile/{username}")
+    @GetMapping("/edit-credentials/{username}")
     public String editCredentialsProfile(@PathVariable("username") String username, Model model) throws UserNotFoundException {
         System.out.println("inside edit profile.");
         UserDto userDto = userServiceImpl.findByUsername(username);
         model.addAttribute("user",userDto);
-        return "edit-profile";
+        return "edit-credentials";
+    }
+
+    @GetMapping("/change-profile-picture/{username}")
+    public String changeProfilePicture(@PathVariable("username") String username, Model model) throws UserNotFoundException {
+        System.out.println("inside changeProfilePicture .");
+        UserDto userDto = userServiceImpl.findByUsername(username);
+        model.addAttribute("user",userDto);
+        return "change-profile-picture";
     }
 
     @PostMapping("/edit-user-details/{username}")
@@ -81,7 +90,7 @@ public class UserController {
 
         // Redirect to the user profile page
 //        return "redirect:/user-profile/" + username;
-        return "redirect:/login-user";
+        return "redirect:/login";
     }
 
     @PostMapping("/edit-user-credentials/{username}")
@@ -89,15 +98,19 @@ public class UserController {
         System.out.println("Inside credentials mapping");
         UserDto existingUser = userServiceImpl.findByUsername(username);
 
-//
-//        existingUser.setUsername(updatedUser.getUsername());
-//        existingUser.setPassword(updatedUser.getPassword());
-        //existingUser.setProfileImage(updatedUser.getProfileImageFile().getBytes());
-
-
         userServiceImpl.updateUserCredentials(existingUser,updatedUser);
 
-        return "redirect:/login-user";
+        return "redirect:/login";
+    }
+
+    @PostMapping("/change-user-profile-picture/{username}")
+    public String changeUserProfilePicture(@PathVariable String username, @ModelAttribute UserProfilePictureDto userProfilePictureDto) throws UserNotFoundException, IOException {
+        System.out.println("Inside credentials mapping");
+        UserDto existingUser = userServiceImpl.findByUsername(username);
+
+        userServiceImpl.updateProfilePicture(existingUser,userProfilePictureDto);
+
+        return "redirect:/login";
     }
 
     @PostMapping("/login-user")
