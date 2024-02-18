@@ -16,21 +16,21 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
 
     ModelMapper mapper = new ModelMapper();
 
-    public void saveUser(UserDto userDto){
+    public void saveUser(UserDto userDto) {
 
-        User user = mapper.map(userDto,User.class);
+        User user = mapper.map(userDto, User.class);
         MultipartFile file = user.getProfileImageFile();
-        if(file != null && !file.isEmpty()){
-            try{
-                 user.setProfileImage(file.getBytes());
-            }catch (Exception e){
+        if (file != null && !file.isEmpty()) {
+            try {
+                user.setProfileImage(file.getBytes());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    public void updateUserDetails(UserDto userDto,UserDetailsDto userDetailsDto){
-        User updtUser = mapper.map(userDto,User.class);
+    public void updateUserDetails(UserDto userDto, UserDetailsDto userDetailsDto) {
+        User updtUser = mapper.map(userDto, User.class);
         System.out.println("--------------");
         System.out.println("Inside update user details");
         System.out.println(updtUser.getUsername());
@@ -50,9 +50,10 @@ public class UserServiceImpl implements UserService{
         updtUser.setAge(userDetailsDto.getAge());
         userRepository.save(updtUser);
     }
+
     @Override
     public void updateUserCredentials(UserDto userDto, UserCredentialsDto userCredentialsDto) {
-        User updtUser = mapper.map(userDto,User.class);
+        User updtUser = mapper.map(userDto, User.class);
         System.out.println("--------------");
         System.out.println("Inside update user credentials");
         System.out.println(updtUser.getUsername());
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void updateProfilePicture(UserDto userDto, UserProfilePictureDto userProfilePictureDto) {
-        User updtUser = mapper.map(userDto,User.class);
+        User updtUser = mapper.map(userDto, User.class);
         System.out.println("--------------");
         System.out.println("Inside update profile picture");
         System.out.println(updtUser.getUsername());
@@ -73,10 +74,10 @@ public class UserServiceImpl implements UserService{
 
 
         MultipartFile file = userProfilePictureDto.getProfileImageFile();
-        if(file != null && !file.isEmpty()){
-            try{
+        if (file != null && !file.isEmpty()) {
+            try {
                 updtUser.setProfileImage(file.getBytes());
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -86,19 +87,18 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto findByUsername(String username) throws UserNotFoundException {
         Optional<User> optUser = userRepository.findByUsername(username);
-        if(optUser.isPresent()) {
+        if (optUser.isPresent()) {
             User user = optUser.get();
-            UserDto userDto = mapper.map(user,UserDto.class);
-            return userDto;
+            return mapper.map(user, UserDto.class);
+
         }
         throw new UserNotFoundException("User not found");
     }
 
-    public User findUser(String username, String password){
+    public User findUser(String username, String password) {
         Optional<User> optional = Optional.ofNullable(userRepository.findByUsernameAndPassword(username, password));
         User user = null;
-        boolean value=true;
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             user = optional.get();
         }
 //        else{
@@ -106,12 +106,11 @@ public class UserServiceImpl implements UserService{
 //        }
         return user;
     }
+
     @Override
     public List<User> showAllUser() {
-       List<User> listUsers =  userRepository.findAll();
-       return listUsers;
+        return userRepository.findAll();
     }
-
 
 
     public Optional<User> findById(String id) {

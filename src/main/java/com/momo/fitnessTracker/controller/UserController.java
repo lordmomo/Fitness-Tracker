@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -27,7 +28,7 @@ public class UserController {
     HttpServletResponse response;
 
     @GetMapping("/")
-    public String homePage(){
+    public String homePage() {
         return "index";
     }
 
@@ -50,7 +51,7 @@ public class UserController {
     public String editDetailsProfile(@PathVariable("username") String username, Model model) throws UserNotFoundException {
         System.out.println("inside edit profile.");
         UserDto userDto = userServiceImpl.findByUsername(username);
-        model.addAttribute("user",userDto);
+        model.addAttribute("user", userDto);
         return "edit-profile";
     }
 
@@ -58,7 +59,7 @@ public class UserController {
     public String editCredentialsProfile(@PathVariable("username") String username, Model model) throws UserNotFoundException {
         System.out.println("inside edit profile.");
         UserDto userDto = userServiceImpl.findByUsername(username);
-        model.addAttribute("user",userDto);
+        model.addAttribute("user", userDto);
         return "edit-credentials";
     }
 
@@ -66,7 +67,7 @@ public class UserController {
     public String changeProfilePicture(@PathVariable("username") String username, Model model) throws UserNotFoundException {
         System.out.println("inside changeProfilePicture .");
         UserDto userDto = userServiceImpl.findByUsername(username);
-        model.addAttribute("user",userDto);
+        model.addAttribute("user", userDto);
         return "change-profile-picture";
     }
 
@@ -74,22 +75,8 @@ public class UserController {
     public String editProfile(@PathVariable String username, @ModelAttribute UserDetailsDto updatedUser) throws UserNotFoundException, IOException {
         System.out.println("Inside patch mapping");
         UserDto existingUser = userServiceImpl.findByUsername(username);
+        userServiceImpl.updateUserDetails(existingUser, updatedUser);
 
-        // Update the existing user with the changes
-//        existingUser.setFirstName(updatedUser.getFirstName());
-//        existingUser.setLastName(updatedUser.getLastName());
-//        existingUser.setEmail(updatedUser.getEmail());
-//        existingUser.setAge(updatedUser.getAge());
-//
-//        existingUser.setUsername(updatedUser.getUsername());
-//        existingUser.setPassword(updatedUser.getPassword());
-        //existingUser.setProfileImage(updatedUser.getProfileImageFile().getBytes());
-
-
-        userServiceImpl.updateUserDetails(existingUser,updatedUser);
-
-        // Redirect to the user profile page
-//        return "redirect:/user-profile/" + username;
         return "redirect:/login";
     }
 
@@ -97,8 +84,7 @@ public class UserController {
     public String editProfileCredentials(@PathVariable String username, @ModelAttribute UserCredentialsDto updatedUser) throws UserNotFoundException, IOException {
         System.out.println("Inside credentials mapping");
         UserDto existingUser = userServiceImpl.findByUsername(username);
-
-        userServiceImpl.updateUserCredentials(existingUser,updatedUser);
+        userServiceImpl.updateUserCredentials(existingUser, updatedUser);
 
         return "redirect:/login";
     }
@@ -107,21 +93,20 @@ public class UserController {
     public String changeUserProfilePicture(@PathVariable String username, @ModelAttribute UserProfilePictureDto userProfilePictureDto) throws UserNotFoundException, IOException {
         System.out.println("Inside credentials mapping");
         UserDto existingUser = userServiceImpl.findByUsername(username);
-
-        userServiceImpl.updateProfilePicture(existingUser,userProfilePictureDto);
+        userServiceImpl.updateProfilePicture(existingUser, userProfilePictureDto);
 
         return "redirect:/login";
     }
 
     @PostMapping("/login-user")
-    public String userLogin(@RequestParam String username, @RequestParam String password , Model model, HttpSession session) throws IOException {
+    public String userLogin(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) throws IOException {
 
         System.out.println("inside user login.");
 
-        User isValidUser = userServiceImpl.findUser(username,password);
+        User isValidUser = userServiceImpl.findUser(username, password);
 
-        if(isValidUser == null ){
-            model.addAttribute("errorMessage","Access Denied-Invalid Credentials");
+        if (isValidUser == null) {
+            model.addAttribute("errorMessage", "Access Denied-Invalid Credentials");
             return "login";
         }
 
@@ -131,27 +116,27 @@ public class UserController {
 
         String base64Image = Base64.getEncoder().encodeToString(isValidUser.getProfileImage());
 
-        model.addAttribute("fullName",fullName);
-        model.addAttribute("age",isValidUser.getAge());
-        model.addAttribute("username",isValidUser.getUsername());
-        model.addAttribute("userEmail",isValidUser.getEmail());
-        model.addAttribute("profileImage",base64Image);
-        session.setAttribute("activeUser",fullName);
+        model.addAttribute("fullName", fullName);
+        model.addAttribute("age", isValidUser.getAge());
+        model.addAttribute("username", isValidUser.getUsername());
+        model.addAttribute("userEmail", isValidUser.getEmail());
+        model.addAttribute("profileImage", base64Image);
+        session.setAttribute("activeUser", fullName);
 
         return "profile";
     }
 
     @PostMapping("/user-list")
-    public String userList(Model model,HttpSession session){
+    public String userList(Model model, HttpSession session) {
         System.out.println("inside user list.");
 
         String fullName = (String) session.getAttribute("activeUser");
         System.out.println(fullName);
 
-        model.addAttribute("fullName",fullName);
+        model.addAttribute("fullName", fullName);
 
         List<User> listUsers = userServiceImpl.showAllUser();
-        model.addAttribute("listUsers",listUsers);
+        model.addAttribute("listUsers", listUsers);
         return "user-list";
     }
 
@@ -162,7 +147,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public String logoutPage(Model model){
+    public String logoutPage(Model model) {
         return "redirect:/login";
     }
 
