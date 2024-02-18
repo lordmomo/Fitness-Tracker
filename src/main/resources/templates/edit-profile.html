@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <style >
+    <style>
         .Name {
             text-transform: capitalize;
         }
+
     </style>
     <title>Sign Up Page</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
@@ -19,7 +20,7 @@
     </div>
     <form th:action="@{'/edit-user-details/'+${username}}" th:object="${user}"
           method="post" style="max-width: 600px; margin: 0 auto;" enctype="multipart/form-data">
-        <input type="hidden" name="_method" value="patch" />
+        <input type="hidden" name="_method" value="patch"/>
         <div class="m-3">
 
             <div class="form-group row">
@@ -34,7 +35,7 @@
                 <label class="col-4 col-form-label">Last Name: </label>
                 <div class="col-8">
                     <input type="text" th:field="*{lastName}" class="form-control Name"
-                           required minlength="2" maxlength="20" />
+                           required minlength="2" maxlength="20"/>
                 </div>
             </div>
 
@@ -42,40 +43,16 @@
                 <label class="col-4 col-form-label">Age: </label>
                 <div class="col-8">
                     <input type="number" th:field="*{age}" class="form-control"
-                           required min="0" />
+                           required min="0"/>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-4 col-form-label">E-mail: </label>
                 <div class="col-8">
-                    <input type="email" th:field="*{email}" class="form-control" required />
+                    <input type="email" th:field="*{email}" class="form-control" required/>
                 </div>
             </div>
-
-<!--            <div class="form-group row">-->
-<!--                <label class="col-4 col-form-label">Username: </label>-->
-<!--                <div class="col-8">-->
-<!--                    <input type="text" th:field="*{username}" class="form-control"-->
-<!--                           required minlength="4" maxlength="12" />-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="form-group row">-->
-<!--                <label class="col-4 col-form-label">Password: </label>-->
-<!--                <div class="col-8">-->
-<!--                    <input type="password" th:field="*{password}" class="form-control"-->
-<!--                           required minlength="6" maxlength="10"/>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="form-group row">-->
-<!--                <label class="col-4 col-form-label">Profile picture: </label>-->
-<!--                <div class="col-8">-->
-<!--                    <input type="file" id="profileImage" th:field="*{profileImageFile}" class="form-control"-->
-<!--                           required accept="image/"/>-->
-<!--                </div>-->
-<!--            </div>-->
 
             <div>
                 <button type="submit" class="btn btn-primary">Save</button>

@@ -69,8 +69,6 @@
                 <button type="submit" class="btn btn-primary">Edit Profile Details </button>
             </form>
 
-            <!-- Edit Profile Button -->
-
             <form th:action="@{'/edit-credentials/'+${username}}" th:object="${user}"
                   method="get" class="mt-3">
                 <button type="submit" class="btn btn-primary">Edit Credentials</button>
